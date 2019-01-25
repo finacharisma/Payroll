@@ -1,0 +1,23 @@
+.DTFC_LeftBodyLiner{overflow-y:unset !important}
+.DTFC_RightBodyLiner{overflow-y:unset !important}
+
+.dataTables_wrapper {
+    font-size: 13px;
+	font-family: "Poppins", sans-serif;
+}
+
+.ghapus{
+	color: red;
+	border: none;
+	background-color: white;
+}
+
+.gtambah{
+	color: white;
+	border: none;
+	background-color: green;
+	margin-bottom: 20px;
+}
+/*.navbar.default-layout .navbar-menu-wrapper {
+	width: 100%
+}*/
