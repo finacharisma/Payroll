@@ -92,7 +92,7 @@
 					?>
 							<div class="col-md-2"><p class="mb-2" id="ketBonus<?php echo $i;?>"><?php echo $gbonus->ketBonus;?></p></div>
 							<div class="col-md-2"><p class="mb-2">: <?php echo 'Rp. ', number_format($gbonus->jumlahBonus, 0, ".", ".");?></p></div>
-							<div class="col-md-2"><p class="mb-2"><?php echo $gbonus->bulanBonus;?></p></div>
+							<div class="col-md-2"><p class="mb-2"><?php echo date('d/m/Y', strtotime($gbonus->bulanBonus));?></p></div>
 							<div class="col-md-6">
 								<button data-toggle="modal" data-target="#modal_konfirm" class="ghapus" id="<?php echo $i;?>">
 								  <i class="mdi mdi-delete"></i>
