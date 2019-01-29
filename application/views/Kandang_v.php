@@ -119,6 +119,16 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+		var msg = '<?php echo $this->session->flashdata('errMsg');?>';
+		if(msg != ''){
+			swal({ 
+				type: 'error', 
+				title: 'Error!',
+				icon: 'danger',
+				text: msg 
+			}) 
+		}
+		
 		$('#btn_tambah').click(function() {
 			$('#lokasi').val('');
 			$('#namaKandang').val('');

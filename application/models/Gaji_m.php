@@ -4,7 +4,7 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 class Gaji_m extends Eloquent
 {
 	protected $table = 'gaji';
-	protected $fillable = ['idPegawai', 'tanggalGaji', 'totalHutang', 'totalGaji'];
+	protected $fillable = ['idPegawai', 'tanggalGaji', 'totalHutang', 'totalGaji','flag'];
 	public $timestamps = false;
 	
 	public function searchByTgl($tgl)
@@ -14,9 +14,17 @@ class Gaji_m extends Eloquent
         return $data;
     }
 	
-	public function searchByTglId($tgl, $id)
+	public function searchByTglId($tgl,$id)
     {
-        $data = Gaji_m::where('tanggalGaji', 'like', $tgl.'%')->where('idPegawai', $id)->get();
+        $data = Gaji_m::where('tanggalGaji', 'like', $tgl.'%')
+			->where('idPegawai', $id)
+			->get();
+        return $data;
+    }
+	
+	public function searchByTglIdFlag($tgl, $id)
+    {
+        $data = Gaji_m::where('tanggalGaji', 'like', $tgl.'%')->where('idPegawai', $id)->where('flag', 1)->get();
         return $data;
     }
 	
@@ -28,8 +36,17 @@ class Gaji_m extends Eloquent
 		$gaji->tanggalGaji = $data['tanggalGaji'];
 		$gaji->totalHutang = $data['totalHutang'];
 		$gaji->totalGaji = $data['totalGaji'];
+		$gaji->flag = $data['flag'];
 		
 		$result = $gaji->save();
+		return $result;
+    }
+	
+	public function ubahGaji($data)
+    {
+		$result = Gaji_m::where('idPegawai', $data['idPegawai'])
+						->where('tanggalGaji', $data['tanggalGaji'])
+						->update($data);
 		return $result;
     }
 	
@@ -37,7 +54,7 @@ class Gaji_m extends Eloquent
     {
     	$result = Gaji_m::where('tanggalGaji', 'like', $tgl.'%')
 			->where('idPegawai', $id)
-			->delete();
+			->update(['flag' => 0]);
 		return $result;
     }
 }

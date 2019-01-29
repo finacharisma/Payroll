@@ -29,6 +29,28 @@ class Gaji extends CI_Controller {
 		}
 	}
 	
+	public function bulatkan($angka){
+		$bulat = 0;
+		$subangka = intval(substr($angka,-4));
+		if(($subangka == 0) or ($subangka == 5000)){
+			$bulat = $angka;
+		}else if($subangka < 5000){
+			$bulat = (intval($angka/10000))*10000;
+			if($angka >= 0){
+				$bulat += 5000;
+			}
+		}else if($subangka > 5000){
+			$bulat = (((intval($angka/10000))+1)*10000);
+			if($angka < 0){
+				$bulat -= 15000;
+			}
+		}else{
+			$bulat = $angka;
+		}
+		
+		return $bulat;
+	}
+	
 	public function hitungGaji($tgl, $idPegawai){
 		if($this->session->userdata('username') == ""){
 			redirect(site_url());
@@ -142,26 +164,12 @@ class Gaji extends CI_Controller {
 				$totalHutang = $hutang[0]['hutang'];
 				$gajiBersih = $totalGaji - $hutang[0]['hutang'];	
 			}
-			//pembulatan
-			$gaji = intval(substr($gajiBersih,-4));
-			if(($gaji == 0) or ($gaji == 5000)){
-				$dataku['gajiBulat'] = $gajiBersih;
-			}else if($gaji < 5000){
-				$dataku['gajiBulat'] = (intval($gajiBersih/10000))*10000+5000;
-			}else if($gaji > 5000){
-				$dataku['gajiBulat'] = ((intval($gajiBersih/10000))+1)*10000;
-			}else{
-				$dataku['gajiBulat'] = $gajiBersih;
-			}
+			//pembulatan gaji bersih
+			$dataku['gajiBulat'] = $this->bulatkan($gajiBersih);
 			
 			$dataku['totalGaji'] = $totalGaji;
 			$dataku['gajiBersih'] = $gajiBersih;
-			
-			if($totalHutang == '')
-				$dataku['totalHutang'] = 0;
-			else
-				$dataku['totalHutang'] = $totalHutang;
-			
+			$dataku['totalHutang'] = $totalHutang;
 			return $dataku;
 		}
 	}
@@ -186,29 +194,19 @@ class Gaji extends CI_Controller {
 			$hasil = json_decode($hasil);
 			
 			foreach($hasil as $row){
-				$status = $this->Gaji_m->searchByTglId($tgl, $row->idPegawai); //cari gaji pegawai pd tanggal tertentu
+				$status = $this->Gaji_m->searchByTglIdFlag($tgl, $row->idPegawai); //cari gaji pegawai pd tanggal tertentu yang flagnya 1
 				if(count($status) == 0){
 					$data['status'] = "none";
 					$row->gajisaved = 0;
 				}else{
 					$data['status'] = "ada";
 					$row->totalHutang = $status[0]['totalHutang'];
-					
-					//pembulatan total gaji
-					$gaji = intval(substr($row->totalGaji,-4));
-					if(($gaji == 0) or ($gaji == 5000)){
-						$row->totalGaji = $row->totalGaji;
-					}else if($gaji < 5000){
-						$row->totalGaji = (intval($row->totalGaji/10000))*10000+5000;
-					}else if($gaji > 5000){
-						$row->totalGaji = ((intval($row->totalGaji/10000))+1)*10000;
-					}else{
-						$row->totalGaji = $row->totalGaji;
-					}
-					
 					$row->gajiBersih = $row->totalGaji - $status[0]['totalHutang'];
-					$row->gajiBulat = $row->totalGaji - $status[0]['totalHutang'];
+					$row->gajiBulat = $this->bulatkan($row->totalGaji) - $status[0]['totalHutang'];
 					$row->gajisaved = $status[0]['totalGaji'];
+					if($status[0]['totalGaji'] == 0){
+						$row->gajisaved = $this->bulatkan($row->totalGaji) - $row->totalHutang;
+					}
 				}
 			}
 			$data['result'] = json_encode($hasil);
@@ -225,23 +223,11 @@ class Gaji extends CI_Controller {
 			$hasil = json_encode($hasil);
 			$hasil = json_decode($hasil);
 			
-			$status = $this->Gaji_m->searchByTglId($tgl, $idPegawai); //cek apa utangnya udah disimpen?
-			if(count($status) != 0){
+			$status = $this->Gaji_m->searchByTglIdFlag($tgl, $idPegawai); //cek apa data gaji udah disimpen?
+			if(count($status) != 0){ //kalo udah
 				$hasil->totalHutang = $status[0]['totalHutang'];
 				$hasil->gajiBersih = $hasil->totalGaji - $status[0]['totalHutang'];
-				
-				
-				//pembulatan
-				$gaji = intval(substr($hasil->gajiBersih,-4));
-				if(($gaji == 0) or ($gaji == 5000)){
-					$hasil->gajiBulat = $hasil->gajiBersih;
-				}else if($gaji < 5000){
-					$hasil->gajiBulat = (intval($hasil->gajiBersih/10000))*10000+5000;
-				}else if($gaji > 5000){
-					$hasil->gajiBulat = ((intval($hasil->gajiBersih/10000))+1)*10000;
-				}else{
-					$hasil->gajiBulat = $hasil->gajiBersih;
-				}
+				$hasil->gajiBulat = $this->bulatkan($hasil->gajiBersih);
 			}
 			
 			$data['bonus'] = $this->Bonus_m->detailBonus($tgl, $idPegawai);
@@ -276,14 +262,27 @@ class Gaji extends CI_Controller {
 			$hasil = json_decode($hasil);
 			
 			foreach($hasil as $row){
+				//cek apa udah pernah disimpen
+				$tambah = false;
+				$cek = $this->Gaji_m->searchByTglId($tgl,$row->idPegawai);
+				if(count($cek) == 0){ //belom pernah disimpen
+					$tambah = true;
+				}
+				
 				if($row->gajiBulat >= 0){
 					//tambah data gaji
 					$inp = array('idPegawai'=>$row->idPegawai,
 							'tanggalGaji'=>$tgl.'-00',
 							'totalHutang'=>$row->totalHutang,
-							'totalGaji'=>$row->gajiBulat
+							'totalGaji'=>$row->gajiBulat,
+							'flag'=>1
 							);
-					$this->Gaji_m->simpanGaji($inp);
+						
+					if($tambah == true){
+						$this->Gaji_m->simpanGaji($inp);
+					}else{
+						$this->Gaji_m->ubahGaji($inp);
+					}
 					
 					//update data hutang
 					$this->Hutang_m->updateHutangFromGaji($row->idPegawai, $tgl);
@@ -292,7 +291,8 @@ class Gaji extends CI_Controller {
 					$inp = array('idPegawai'=>$row->idPegawai,
 							'tanggalGaji'=>$tgl.'-00',
 							'totalHutang'=>$row->totalHutang,
-							'totalGaji'=>0
+							'totalGaji'=>0,
+							'flag'=>1
 							);
 					$this->Gaji_m->simpanGaji($inp);
 					//update data hutang
@@ -344,8 +344,12 @@ class Gaji extends CI_Controller {
 		if($this->session->userdata('username') == ""){
 			redirect(site_url());
 		}else{
+			$tgl = $this->input->post('tanggal');
+			if($tgl == ''){
+				$tgl = date(Y-m-d);
+			}
 			$data = array('idPegawai'=>$this->input->post('idPegawai'),
-						'bulanBonus'=>$this->input->post('tgl'),
+						'bulanBonus'=>$tgl,
 						'ketBonus'=>$this->input->post('ketBonus'),
 						'jumlahBonus'=>$this->input->post('jumlahBonus')
 						);

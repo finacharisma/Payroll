@@ -23,13 +23,20 @@ class Harga extends CI_Controller {
 		if($this->session->userdata('username') == ""){
 			redirect(site_url());
 		}else{
+			if($this->input->post('tipe') == ''){
+				$tipe = 'sistem';
+			}else{
+				$tipe = $this->input->post('tipe');
+			}
 			$data = array('namaItem'=>$this->input->post('nama'),
 						'harga'=>str_replace('.','',$this->input->post('hargaItem')),
-						'tipe'=>$this->input->post('tipe')
+						'tipe'=>$tipe
 						);
 			$result = $this->Harga_m->ubahHarga($data);
-			if($result)
-				redirect('Harga','refresh');
+			if(!$result)
+				$this->session->set_flashdata('errMsg','Gagal mengubah data');
+			
+			redirect('Harga','refresh');
 		}
 	}
 	
@@ -44,8 +51,10 @@ class Harga extends CI_Controller {
 						);
 			
 			$result = $this->Harga_m->tambahHarga($data);
-			if($result)
-				redirect('Harga','refresh');
+			if(!$result)
+				$this->session->set_flashdata('errMsg','Gagal menambah data');
+			
+			redirect('Harga','refresh');
 		}
 	}
 	
@@ -58,8 +67,10 @@ class Harga extends CI_Controller {
 			$nama = str_replace('_',' ',$nama);
 			$result = $this->Harga_m->hapusHarga($nama, $this->uri->segment(4));
 			
-			if($result)
-				redirect('Harga','refresh');
+			if(!$result)
+				$this->session->set_flashdata('errMsg','Gagal menghapus data');
+			
+			redirect('Harga','refresh');
 		}
 	}
 

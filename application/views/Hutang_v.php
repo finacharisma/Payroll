@@ -108,7 +108,7 @@
                         </div>
 						<div class="form-group row tanggalHutang"><label class="col-sm-3 col-form-label">Tanggal Berhutang</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" id="tanggalHutang" name="tanggalHutang" autocomplete="off" required>
+                            <input type="text" class="form-control" id="tanggalHutang" name="tanggalHutang" autocomplete="off" placeholder="yyyy-mm-dd" required>
                           </div>
                         </div>
                         <div class="form-group row"><label class="col-sm-3 col-form-label">Jumlah Hutang</label>

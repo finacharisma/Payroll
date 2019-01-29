@@ -79,8 +79,8 @@
 				<hr />
 				
 				<div class="row">
-					<div class="col-md-4"><p class="font-weight-bold">Lain-lain</p></div>
-					<div class="col-md-8">
+					<div class="col-md-6"><p class="font-weight-bold">Lain-lain</p></div>
+					<div class="col-md-6">
 						<button data-toggle="modal" data-target="#modal_bonus" class="gtambah">
 							<i class="mdi mdi-plus"></i>
 						</button>
@@ -92,7 +92,8 @@
 					?>
 							<div class="col-md-2"><p class="mb-2" id="ketBonus<?php echo $i;?>"><?php echo $gbonus->ketBonus;?></p></div>
 							<div class="col-md-2"><p class="mb-2">: <?php echo 'Rp. ', number_format($gbonus->jumlahBonus, 0, ".", ".");?></p></div>
-							<div class="col-md-8">
+							<div class="col-md-2"><p class="mb-2"><?php echo $gbonus->bulanBonus;?></p></div>
+							<div class="col-md-6">
 								<button data-toggle="modal" data-target="#modal_konfirm" class="ghapus" id="<?php echo $i;?>">
 								  <i class="mdi mdi-delete"></i>
 								</button>
@@ -146,6 +147,11 @@
 						<div class="form-group row hi2"><label class="col-sm-3 col-form-label">Jumlah Bonus</label>
                           <div class="col-sm-9">
                             <input type="number" class="form-control" id="jumlahBonus" name="jumlahBonus" style="text-align:right" required>
+                          </div>
+                        </div>
+						<div class="form-group row"><label class="col-sm-3 col-form-label">Tanggal</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" id="tanggal" name="tanggal" autocomplete="off">
                           </div>
                         </div>
 						<input type="hidden" class="form-control" id="tgl" name="tgl" value="<?php echo $this->uri->segment(3);?>">
@@ -202,6 +208,20 @@ $(document).ready(function() {
             text: msg 
         }); 
 	}
+	
+	var tgl = $('#tgl').val();
+	var tahun = tgl.substr(0,4);
+	var bulan = (tgl.substr(5,2))-1;
+	var date = new Date();
+	var firstDay = new Date(tahun,bulan, 1);
+	var lastDay = new Date(tahun,bulan+1, 0);
+	
+	$('#tanggal').datepicker({
+		format: "yyyy-mm-dd",
+        startDate: firstDay,
+		endDate: lastDay,
+        autoclose:true
+    });
 	
 	$('#kembali').click(function() {
 		window.location = '<?php echo site_url();?>Gaji/viewGaji/<?php echo $this->uri->segment(3)?>';

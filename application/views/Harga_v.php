@@ -21,6 +21,7 @@
                 <tr>
 				  <th>No.</th>
                   <th>Nama Item</th>
+                  <th>Tipe Item</th>
                   <th style="text-align:right">Harga per item</th>
                   <th></th>
                 </tr>
@@ -32,7 +33,8 @@
                   ?>
                   <tr>
 					<td style="text-align:right"><?= $i+=1;?></td>
-                    <td id="namanya<?php echo $i;?>"><?= $row->namaItem?></td>	
+                    <td id="namanya<?php echo $i;?>"><?= $row->namaItem?></td>
+                    <td id="namanya<?php echo $i;?>"><?= $row->tipe?></td>
                     <td style="text-align:right"><?= 'Rp. '.number_format($row->harga, 0, ".", ".")?></td>						
                     <!--helper-->
 					<input type="hidden" id="namaItem<?php echo $i?>" value="<?php echo $row->namaItem;?>">
@@ -85,9 +87,10 @@
                             <input type="text" class="form-control" id="hargaItem" name="hargaItem" style="text-align:right" required>
                           </div>
                         </div>
-						<div class="form-group row namaPegawai p2"><label class="col-sm-3 col-form-label">Tipe</label>
+						<div class="form-group row tipe"><label class="col-sm-3 col-form-label">Tipe</label>
                           <div class="col-sm-9">
-							<select class="form-control" id="tipe" name="tipe" required>
+							<select class="form-control" id="tipe" name="tipe">
+								<option value=""></option>
 								<option value="pemasukan">Pemasukan</option>
 								<option value="pengeluaran">Pengeluaran</option>
 							</select>
@@ -133,11 +136,23 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+		var msg = '<?php echo $this->session->flashdata('errMsg');?>';
+		if(msg != ''){
+			swal({ 
+				type: 'error', 
+				title: 'Error!',
+				icon: 'danger',
+				text: msg 
+			}) 
+		}
+		
 		$('#harga').DataTable({
 		});
 		
 		$('#btn_tambah').click(function() {
+			$('.tipe').show();
 			document.getElementById("namaItem").disabled = false;
+			document.getElementById('tipe').required = true;
 			
 			$('#namaItem').val('');
 			$('#hargaItem').val('');
@@ -153,7 +168,15 @@
 			$('#namaItem').val($('#namaItem' + id).val());
 			$('#nama').val($('#namaItem' + id).val());
 			$('#hargaItem').val($('#hargaItem' + id).val());
-			$('#tipe').val($('#tipe' + id).val());
+			
+			if($('#tipe' + id).val() == 'sistem'){
+				$('.tipe').hide();
+				document.getElementById('tipe').required = false;
+			}else{
+				$('.tipe').show();
+				$('#tipe').val($('#tipe' + id).val());
+				document.getElementById('tipe').required = true;
+			}
 			
 			$('#form_harga').attr('action','<?php echo site_url();?>Harga/ubahHarga');
 		});

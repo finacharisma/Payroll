@@ -115,8 +115,8 @@
 						<div class="form-group row hi1"><label class="col-sm-3 col-form-label">Tipe Pengeluaran</label>
                           <div class="col-sm-9">
 							<select class="form-control" id="tipePengeluaran" name="tipePengeluaran">
-								<option value="pokok">Pokok</option>
 								<option value="nonpokok">Nonpokok</option>
+								<option value="pokok">Pokok</option>
 							</select>
                           </div>
                         </div>
@@ -127,13 +127,13 @@
                         </div>
 						<div class="form-group row"><label class="col-sm-3 col-form-label">Nama Pengeluaran</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" id="jenisPengeluaran" name="jenisPengeluaran" required>
+                            <input type="text" class="form-control" id="jenisPengeluaran" name="jenisPengeluaran" autocomplete="off" required>
                           </div>
                         </div>
 						
 						<div class="form-group row n1"><label class="col-sm-3 col-form-label">Jumlah Pengeluaran(Rp.)</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" id="jumlahPengeluaran" name="jumlahPengeluaran" style="text-align:right" required>
+                            <input type="text" class="form-control" id="jumlahPengeluaran" name="jumlahPengeluaran" autocomplete="off" style="text-align:right" required>
                           </div>
                         </div>
 						<div class="form-group row n2"><label class="col-sm-3 col-form-label">Tipe</label>
@@ -147,7 +147,7 @@
 						
                         <div class="form-group row p1"><label class="col-sm-3 col-form-label">Jumlah</label>
                           <div class="col-sm-9">
-                            <input type="number" class="form-control" id="jumlah" name="jumlah" style="text-align:right" required>
+                            <input type="number" class="form-control" id="jumlah" name="jumlah" style="text-align:right" autocomplete="off" required>
                           </div>
                         </div>
                         <div class="form-group row namaPegawai p2"><label class="col-sm-3 col-form-label">Harga Satuan</label>
@@ -239,12 +239,12 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	$(".n1").hide();
-	$(".n2").hide();
-	$("#jumlahPengeluaran").val("0");
-	$("#tipe").val("rutin");
-    $(".p1").show();
-	$(".p2").show();
+	 $(".n1").show();
+     $(".n2").show();
+	$("#jumlahPengeluaran").val('');
+	$("#jumlah").val("0");
+    $(".p1").hide();
+	$(".p2").hide();
 	
 	var tgl = $('#tgl').val();
 	var tahun = tgl.substr(0,4);

@@ -76,8 +76,10 @@ class Hutang extends CI_Controller {
 		}else{
 			$result = $this->Hutang_m->hapusHutang($this->uri->segment(3), $this->uri->segment(4));
 			
-			if($result)
-				redirect('Hutang\belumLunas','refresh');
+			if(!$result)
+				$this->session->set_flashdata('errMsg','Gagal menghapus data');
+			
+			redirect('Hutang\belumLunas','refresh');
 		}
 	}
 }

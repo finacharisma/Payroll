@@ -27,8 +27,10 @@ class Kandang extends CI_Controller {
 						'lokasi'=>$this->input->post('lokasi'));
 			
 			$result = $this->Kandang_m->tambahKandang($data);
-			if($result)
-				redirect('Kandang','refresh');
+			if(!$result)
+				$this->session->set_flashdata('errMsg','Gagal menambah data');
+			
+			redirect('Kandang','refresh');
 		}
 	}
 	
@@ -42,9 +44,10 @@ class Kandang extends CI_Controller {
 						'lokasi'=>$this->input->post('lokasi'));
 			
 			$result = $this->Kandang_m->ubahKandang($idKandang, $data);
-			if($result)
-				redirect('Kandang','refresh');
+			if(!$result)
+				$this->session->set_flashdata('errMsg','Gagal mengubah data');
 			
+			redirect('Kandang','refresh');
 		}
 	}
 	
@@ -55,8 +58,10 @@ class Kandang extends CI_Controller {
 		}else{
 			$result = $this->Kandang_m->hapusKandang($this->uri->segment(3));
 			
-			if($result)
-				redirect('Kandang','refresh');
+			if(!$result)
+				$this->session->set_flashdata('errMsg','Gagal menghapus data');
+			
+			redirect('Kandang','refresh');
 		}
 	}
 }

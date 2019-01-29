@@ -67,8 +67,8 @@ class Pengeluaran extends CI_Controller {
 		
 		$dataku['gajiPegawai'] = [];
 		for($b=0;$b<count($idPegawai);$b++){
-			$gajiPegawai = $this->Gaji_m->searchByTglId($tanggal, $idPegawai[$b]);
-			if(count($gajiPegawai) != 0){
+			$gajiPegawai = $this->Gaji_m->searchByTglIdFlag($tanggal, $idPegawai[$b]);
+			if((count($gajiPegawai) != 0) and ($idPegawai[$b] != 13)){
 				$dataku['gajiPegawai'][$b]['nama'] = $nama[$b];
 				$dataku['gajiPegawai'][$b]['gaji'] = $gajiPegawai[0]['totalGaji'] + $gajiPegawai[0]['totalHutang'] + (9000 * $bonusBeras[$b]);
 			}

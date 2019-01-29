@@ -35,40 +35,40 @@ if(($this->session->userdata('username')!='?') or ($this->session->userdata('sta
 	$isi .= '
 			<table border="0" cellpadding="3">
 				<tr>
-					<th><b>KETERANGAN</b></th>
+					<th colspan="2"><b>KETERANGAN</b></th>
 					<th><b>JUMLAH</b></th>
 				</tr>
 				<tr>
-					<td>Bonus Beras</td>
+					<td colspan="2">Bonus Beras</td>
 					<td>'.$result->bonusBeras.' Liter</td>
 				</tr>';
 	if($result->bonusMasaKerja != 0){
 	$isi .= '<tr>
-				<td>Bonus Masa Kerja</td>
+				<td colspan="2">Bonus Masa Kerja</td>
 				<td align="right">Rp. '.number_format($result->bonusMasaKerja, 0, ".", ".").'</td>
 			</tr>';
 	}
 	
 	if($result->tipePegawai == "Kandang"){
 		$isi .= '<tr>
-					<td>Gaji Pokok</td>
+					<td colspan="2">Gaji Pokok</td>
 					<td align="right">Rp. '.number_format($result->gajiPokok, 0, ".", ".").'</td>
 				</tr>';
 		if($result->bonusKeluarga != 0){
 		$isi .=	'<tr>
-					<td>Bonus Keluarga</td>
+					<td colspan="2">Bonus Keluarga</td>
 					<td align="right">Rp. '.number_format($result->bonusKeluarga, 0, ".", ".").'</td>
 				</tr>';
 		}
 		if($result->bonusUsaha != 0){
 		$isi .= '<tr>
-					<td>Bonus Usaha</td>
+					<td colspan="2">Bonus Usaha</td>
 					<td align="right">Rp. '.number_format($result->bonusUsaha, 0, ".", ".").'</td>
 				</tr>';
 		}
 		if($result->hasilPasar != 0){
 		$isi .= '<tr>
-					<td>Hasil Pasar</td>
+					<td colspan="2">Hasil Pasar</td>
 					<td align="right">Rp. '.number_format($result->hasilPasar, 0, ".", ".").'</td>
 				</tr>';
 		}
@@ -82,39 +82,42 @@ if(($this->session->userdata('username')!='?') or ($this->session->userdata('sta
 		}
 		for($i=0;$i<4;$i++){
 			$isi .= '<tr>
-					<td>'.$b[$i].'</td>
+					<td colspan="2">'.$b[$i].'</td>
 					<td  align="right">Rp. '.number_format($a[$i], 0, ".", ".").'</td>
 				</tr>';
 		}
 	}
 	
+	//bonus lain
+	$isi .= '<tr><td colspan="2"><b>BONUS</b></td></tr>';
 	foreach($bonus as $row){
 		$isi .= '<tr>
 					<td>'.ucwords($row->ketBonus).'</td>
+					<td>'.date('d/m/Y', strtotime($row->bulanBonus)).'</td>
 					<td align="right">Rp. '.number_format($row->jumlahBonus, 0, ".", ".").'</td>
 				</tr>
 				';
 	}
 	$isi .= '<tr>
-				<td></td><td><hr /></td>
+				<td  colspan="2"></td><td><hr /></td>
 			</tr>
 			<tr>
-				<td>Total Gaji</td>
+				<td colspan="2">Total Gaji</td>
 				<td align="right">Rp. '.number_format($result->totalGaji, 0, ".", ".").'</td>
 			</tr>
 			<tr>
-				<td>Total Hutang</td>
+				<td colspan="2">Total Hutang</td>
 				<td align="right">Rp. '.number_format($result->totalHutang, 0, ".", ".").'</td>
 			</tr>
 			<tr>
-				<td></td><td><hr /></td>
+				<td  colspan="2"></td><td><hr /></td>
 			</tr>
 			<tr>
-				<td>Gaji Bersih</td>
+				<td  colspan="2">Gaji Bersih</td>
 				<td align="right">Rp. '.number_format($result->gajiBersih, 0, ".", ".").'</td>
 			</tr>
 			<tr>
-				<td>Gaji Akhir</td>
+				<td  colspan="2">Gaji Akhir</td>
 				<td align="right">Rp. '.number_format($result->gajiBulat, 0, ".", ".").'</td>
 			</tr>';
 	

@@ -107,12 +107,12 @@
                         </div>
                         <div class="form-group row"><label class="col-sm-3 col-form-label">Total Karung</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" id="totalKarung" name="totalKarung" required>
+                            <input type="number" class="form-control" id="totalKarung" name="totalKarung" required>
                           </div>
                         </div>
 						<div class="form-group row"><label class="col-sm-3 col-form-label">Karung Pokok</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" id="karungPokok" name="karungPokok" required>
+                            <input type="number" class="form-control" id="karungPokok" name="karungPokok" required>
                           </div>
                         </div>
 						
