@@ -13,15 +13,23 @@ class Pegawai extends CI_Controller {
 	
 	public function PegawaiKandang()
 	{
-		$data['result'] = $this->Pegawai_m->getAllPKandang();
-		$data['kandang'] = $this->Kandang_m->getAll();
-		$this->load->view('PegawaiKandang_v',$data);
+		if($this->session->userdata('username') == ""){
+			redirect(site_url());
+		}else{
+			$data['result'] = $this->Pegawai_m->getAllPKandang();
+			$data['kandang'] = $this->Kandang_m->getAll();
+			$this->load->view('PegawaiKandang_v',$data);
+		}
 	}
 	
 	public function PegawaiAmpas()
 	{
-		$data['result'] = $this->Pegawai_m->getAllPAmpas();
-		$this->load->view('PegawaiAmpas_v',$data);
+		if($this->session->userdata('username') == ""){
+			redirect(site_url());
+		}else{
+			$data['result'] = $this->Pegawai_m->getAllPAmpas();
+			$this->load->view('PegawaiAmpas_v',$data);
+		}
 	}
 	
 	public function tambahPegawai()
